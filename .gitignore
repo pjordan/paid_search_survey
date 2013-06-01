@@ -1,4 +1,6 @@
 *.aux
 *.log
+*.bbl
+*.blg
 *.synctex.gz
 paid-search-survey.pdf

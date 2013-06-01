@@ -39,12 +39,6 @@
 \title{A Practitioner's Guide to Paid Search Literature}
 \author{PATRICK R. JORDAN
 \affil{Microsoft}}
-% NOTE! Affiliations placed here should be for the institution where the
-%       BULK of the research was done. If the author has gone to a new
-%       institution, before publication, the (above) affiliation should NOT be changed.
-%       The authors 'current' address may be given in the "Author's addresses:" block (below).
-%       So for example, Mr. Abdelzaher, the bulk of the research was done at UIUC, and he is
-%       currently affiliated with NASA.
 
 \begin{abstract}
 TODO: Abstract
@@ -67,22 +61,33 @@ TODO
 \section{History} % (fold)
 \label{sec:history}
 
-[Paragraph on brief history of Paid Search] 
+The primary origins of paid search are well documented \cite{Jansen:2008uq}.
+OpenText Corporation, an early provider of search technology for Yahoo! in the mid-1990s, developed, arguably, the first paid search system.\footnote{see \url{http://www.opentext.com/2/global/company/company-history-95-98.htm}}
+In contrast to banner advertising, where advertisers purchased slots within web pages where their ads were shown, OpenText allowed advertisers to position ads within search results.
+Advertisers could select which user queries would trigger premium placement of their ads.
+However, rather than place paid links around organic (non-paid) links, as current systems do, OpenText maintained a single set of links whose order could be manipulated as to favor paying advertisers.\footnote{see \url{http://news.cnet.com/2100-1023-215491.html}}
+This early experiment in manipulating search results failed due to customer and industry complaint, and the project was scrapped. 
+Following OpenText's failed venture, Goto.com pioneered a new system in Februrary 1998, whereby paid links appeared alongside, rather than within, the organic search results.\footnote{see \url{http://news.cnet.com/Pay-for-placement-gets-another-shot/2100-1023_3-208309.html}}
 
-A brief history of Paid Search [Fein \& Pedersen 2006, Jansen \& Mullen 2008] 
+In a further departure from the existing online advertising systems, advertisers using paid search to place ads did not pay each time a user viewed an ad (pay per impression), rather each time a user clicked their link (pay per click).
+In GoTo's system, each time a user queries the search engine, paid ad placement was determined by an auction run in real-time.
+Advertisers submitted bids signifying their willingness-to-pay per click and selected which queries they would bid on by specifying keywords that the query must match.
+Advertisers were ranked according to their bid and premium slots were allocated in accordance with that ranking. 
 
-GoTo.com pioneered the first Paid Search system on the Web in 1998 based on Generalized First Price (GFP) auction (winning bidder pay its bid amount per click) and bid-ordering (ads are rank-ordered by bid amount). 
-Goto.com was renamed Overture in 2001 and was later acquired by Yahoo! In 2003. 
-In Feb 2002, Overture switched its auction mechanism from the Generalized First Price to a more stable Generalized Second Price (GSP where the winning bidder of a clicked ad pays the bid of the ad below it or reserve price) while continuing to run bid-ordering. 
-Google introduced its first Paid Search system, named AdWords, in 2002 based on GSP. Google also changed the ranking and pricing mechanism. 
-Ads are ranked by RankScore which takes into consideration not only the bid but also ad quality score derived from ad CTR (Click Through Rate), keyword and ad copy relevance, and landing page quality. 
-A bidder pays the minimum amount to maintain its ad position determined by the RankScore. 
-In 2007, Yahoo! Search Marketing switched from bid-ordering to revenue-ordering when its Panama system was launched. 
-Around 2005, a few other players including Ask.com, LookSmart, and MSN/Live.com launched their Paid Search services. 
-In 2010, Microsoft and Yahoo! announced their search partnership which combined two separate Paid Search marketplaces into one powered by Bing for Algorithmic Search and AdCenter (now Bing Ads) for Paid Search. 
+Goto.com was renamed Overture in 2001.
+In February 2002, Overture changes the pricing rules of the auction: each winning advertiser pays the maximum of the next highest bid or the reserve price, termed \emph{generalized second price} (GSP).
+In March 2002, Google modifies its existing AdWords system to conform to GSP, however their new system incorporates quality signals, such as the rate users click the ad (CTR), in addition to bids when determining ranking. 
+Overture immediately files a patent infringement lawsuit against Google.
+
+
+Subsequently, circa 2005, a few other entrants including Ask.com, LookSmart, and MSN/Live.com launch their own paid search services.
+In 2007, Yahoo! Search Marketing, after aquiring Overture in 2003, switched from \emph{bid ordering} to \emph{revenue-ordering} (the product of CTR and bid) when its Panama system launched. 
+In 2010, Microsoft and Yahoo! announced their search partnership, which combined two separate paid search marketplaces into one powered by Microsoft's Bing for algorithmic search and AdCenter (now Bing Ads) for paid search. 
+GSP remains the dominant pricing rule in the current paid search marketplaces.
+
 % section history (end)
 
-\section{Auction and Marketplace Design} % (fold)
+\section{Marketplace Design} % (fold)
 \label{sec:auction_and_marketplace_design}
 
 In practice, paid search marketplaces have a number of strategic participants that include advertisers, publishers, agencies, and optimization platforms.  
@@ -91,8 +96,6 @@ Users, whose behavior is not considered strategic, play an important role in def
 Abstractly, advertisers derive value by inducing users to transact with them.  
 Publishers provide an avenue for advertisers to influence users through ads on a search results page (SERP).  
 In response, publishers charge for that influence.  Publishers determine how ads are allocated to available slots on the SERP and how much advertisers are charged for being allocated. 
-
-[Insert example image of a SERP.] 
 
 In all major search engines, advertisers pay when a user clicks on their respective ad.  
 When a click occurs, the user is directed to the advertiser’s landing page.  
