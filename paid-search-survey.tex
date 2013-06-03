@@ -33,10 +33,10 @@
 \begin{document}
 
 % Page heads
-\markboth{P.~R.~Jordan}{A Practitioner's Guide to Paid Search Literature}
+\markboth{P.~R.~Jordan}{Modern Paid Search}
 
 % Title portion
-\title{A Practitioner's Guide to Paid Search Literature}
+\title{Modern Paid Search}
 \author{PATRICK R. JORDAN
 \affil{Microsoft}}
 
@@ -50,7 +50,7 @@ TODO: Abstract
 
 \keywords{Online advertising, paid search}
 
-\acmformat{Patrick R. Jordan, 2013. A Practitioner's Guid to Paid Search Literature.}
+\acmformat{Patrick R. Jordan, 2013. Modern Paid Search.}
 
 \maketitle
 
@@ -87,130 +87,146 @@ GSP remains the dominant pricing rule in the current paid search marketplaces.
 
 % section history (end)
 
-\section{Marketplace Design} % (fold)
-\label{sec:auction_and_marketplace_design}
+\section{Marketplace Environment} % (fold)
+\label{sec:paid_search_marketplace}
 
-In practice, paid search marketplaces have a number of strategic participants that include advertisers, publishers, agencies, and optimization platforms.  
+In practice, paid search marketplaces have a number of strategic participants that include advertisers, publishers (search engines), agencies, and optimization platforms.  
 Existing research into these markets typically abstracts the intermediate relationships and focuses principally on the interaction between endpoints: advertisers and publishers.  
 Users, whose behavior is not considered strategic, play an important role in defining the value of the transactions in the market. 
 Abstractly, advertisers derive value by inducing users to transact with them.  
 Publishers provide an avenue for advertisers to influence users through ads on a search results page (SERP).  
-In response, publishers charge for that influence.  Publishers determine how ads are allocated to available slots on the SERP and how much advertisers are charged for being allocated. 
+In response, publishers charge for that influence.  
+Publishers determine how ads are allocated to available slots on the SERP and how much advertisers are charged for being allocated. 
 
 In all major search engines, advertisers pay when a user clicks on their respective ad.  
-When a click occurs, the user is directed to the advertiser’s landing page.  
-Advertisers derive value from the subsequent interaction by the user---for instance, the user may purchase one of the advertiser’s products.  
+When a click occurs, the user is directed to the advertiser's landing page.  
+Advertisers derive value from the subsequent interaction by the user---for instance, the user may purchase one of the advertiser's products.  
 Because individual users can behave differently, advertisers may ascribe a value to click that depends on the features of a particular user. 
 
-One of the most important features of a particular user, in terms of estimating the value to an advertiser, is the query the user submitted to the search engine.  
-In some cases, the query gives a strong signal of user intent.  
-Because the value of a click may differ vastly according to a particular user and advertiser, publishers use auctions to determine allocation and pricing in the paid search marketplace. 
+One of the most salient features of a particular user, in terms of estimating the value to an advertiser, is the query the user submitted to the search engine.  
+In some cases, the query gives a strong signal of monetizable user intent.  
+Because the value of a click may differ vastly according to a particular user and advertiser, publishers use auctions to determine allocation and pricing in paid search marketplaces. 
 
-Abstractly, advertisers place bids in terms of their willingness to pay per click and the publisher determines which ads get allocated to which slots and at what contingent price.  
-Because the user query can be so discriminating in terms of advertiser value, advertisers condition their decision to bid on a particular user on the keywords within the query.  
+Abstractly, advertisers place bids in terms of their willingness to pay per click and publishers determine which ads get allocated to which slots and at what contingent price.  
+Because the user query can be so discriminating in terms of advertiser value, advertisers condition their decision to bid on the keywords within the query.  
 In this way, keywords define submarkets. 
 
-In order to participate in the marketplace, advertisers define campaigns that consist of ads to be displayed for different keywords as well as their willingness to pay per click for the displaying the.  
-In addition advertisers may specific budgets, which the publishers must respect, as well as other signals of value, such as conversion data. 
+Page layout of the SERP is determined as a result of the auction.
+The presentation of an advertisement varies by publisher, however many of the basic components are consistent across publishers.
+Basic ads typically consist of three lines of text: a line containing a text link (typically colored blue), a line containing a url (typically colored green), and a line text copy (typically colored black). 
+Publishers may decorate the basic ads with extensions such as navigational links within the advertiser's site.  
+Publishers have also introduced new ad types that center around products.  
+These new formats allow for other media to be displayed, such as images. 
+In general, the candidate locations for the ads are above, to the right, and below the organic results.  
+Positions above the organic results, sometimes referred to as \emph{North} or \emph{Main Line} positions, often are priced at a premium since they generally receive the lion's share of clicks.
 
-At this level, paid search can be seen as a stochastic game of severely incomplete and imperfect information.  
-In order to make traction in understanding the strategic choices of participants, early research abstracted the scenario down to a single auction with complete information. 
+In order to participate in the marketplace, advertisers define campaigns that consist of ads to be displayed for different keywords as well as their willingness to pay per click for the displaying the ad.  
+In addition advertisers may specific budgets, which the publishers' systems respect, as well as other signals of value, such as conversion data. 
 
-\subsection{Initial Models and Generalized Second Price} % (fold)
-\label{sub:initial_models_and_generalized_second_price}
+% section paid_search_marketplace (end)
 
-In the initial models of paid search (dependently introduced by Varian and EOS), there are a set of advertisers, [Equation], and a set of available slots, [Equation].  
-The user’s click behavior is defined probabilistically: a user clicks on advertiser [Equation]’s ad in position [Equation] with probability [Equation].  
-In these models, the click probability (or click-through-rate) [Equation] is assumed to be separable, in that  [Equation] where [Equation] is the position effect for slot [Equation] and [Equation] is the advertiser effect for advertiser [Equation].  
-Slots are ordered in terms of [Equation] with [Equation].    
-Finally, each advertiser [Equation] submits a bid [Equation] to the publisher that represents [Equation]’s willingness-to-pay for a click. 
+\section{An Economic Model} % (fold)
+\label{sec:auction_and_marketplace_design}
 
-[Insert figure illustrating the model.] 
+The strategic interactions between publishers and advertisers in a paid search marketplace can be modeled as a game---see \citeN{Osborne:1994fu} for an introduction to game theory.
+Game theory provides a rich mathematical framework from which we can hope to understand the inventives of each participant and predict their responses to changes in the marketplace.
+From a modeler's perspective, this scenario can be classified as a stochastic game of severely incomplete and imperfect information.
+Even with recent advances in computational and empirical game theory, we have little hope of compactly describing the scenario, let alone determining a solution (equilibrium).
+
+
+In order to make traction in understanding the strategic choices of participants, early research heavily abstracted the scenario down to a single (or infinitely repeated) auction for a single keyword as described in Section~\ref{sub:single_auction_model}, whose equilibria are characterized in Section~\ref{sub:equilibrium_characterization}. 
+These models help us understand many of the salient features of the marketplace, however the complexity of the scenario limits the fidelity of the model.
+As marketplace designers, we will sometimes revert to decision and control-theoretic methods when insights from game theory are not available.
+
+
+\subsection{Single Auction Model} % (fold)
+\label{sub:single_auction_model}
+
+Consider a single auction for a user query. 
+There are a set of advertisers, $\mathcal{I} = \{1,\ldots,I\}$, and a set of available slots, $\mathcal{J} = \{1, \ldots, J\}$.  
+The user's click behavior is defined probabilistically: a user clicks on advertiser $i$'s ad in position $j$ with probability $\kappa_{i,j}$.  
+In these models, the click probability $\kappa$ is assumed to be separable, in that $\kappa_{i,j} = \alpha_j\gamma_i$ where $\alpha_j$ is the position effect for slot $j$ and $\gamma_i$ is the advertiser effect for advertiser $i$.  
+Slots are ordered in terms of $\psi$ with $\psi_1 \ge \psi_2 \ge \cdots \ge \psi_{J}$.    
+Finally, each advertiser $i$ submits a bid $b_j$ to the publisher that represents $i$'s willingness-to-pay for a click, which may differ from the advertiser's true value for the click, $v_i$. 
+The auction will assign advertisers to slots and set contingent prices to be paid when an ad is clicked.
 
 The mechanics of the GSP auction are as follows.  
-Each advertiser’s ad is scored according to [Equation].[Footnote]  
-Advertisers are ranked according to [Equation], with [Equation] denoting the advertiser at index [Equation] in the ranking.  
-Slots are allocated according to the rank with slot [Equation] going to advertiser [Equation].  
-If the ad is clicked, advertiser [Equation] is charged a price of 
+Each advertiser's ad is scored according to $s_i = x_i b_i$.
+The coefficient $x_i$ is a function of $\gamma_i$ ad other factors.
+For the basic model, assume $x_i \equiv \gamma_i$.
+Advertisers are ranked according to $s_i$, with $(j)$ denoting the advertiser at index $j$ in the ranking.  
+Slots are allocated according to the rank with slot $j$ going to advertiser $(j)$.  
+If the ad is clicked, advertiser $(j)$ is charged a price of 
 
-[Equation] 
+\begin{equation}
+p_{(j)} = \frac{s_{(j+1)}}{s_{(j)}} b_{(j)}.	
+\label{eqn:gsp-price}
+\end{equation}
 
-%TODO for Thursday: 
-%Describe the characterization of equilibria 
-%Connect GSP equilibria with other notions from Varian and EOS 
-%Lead into structural and other theoretical variants model
+% subsection single_auction_model (end)
 
-% subsection initial_models_and_generalized_second_price (end)
+\subsection{GSP Equilibria} % (fold)
+\label{sub:equilibrium_characterization}
 
-\subsection{Theoretical Variants} % (fold)
-\label{sub:theoretical_variants}
+The first economic models for GSP were independently developed by economists from Google \cite{Varian:2007kx}
+and Yahoo! \cite{Edelman:2007vn}.
+The authors characterize the set of ex post Nash equilibria under a complete-information setting\footnote{The sets $\mathcal{I}$, $\mathcal{J}$, $\{\alpha_j\}_{j\in \mathcal{J}}$, and $\{\gamma_i\}_{i \in \mathcal{I}}$ are known to all participants.} with risk-neutral advertisers.
+In this setting, the equilbria giving the lowest revenue to the publisher are outcome equivalent to the Vickrey-Clark-Groves (VCG) auction \cite{Vickrey:1961ys}.
 
-TODO
+The equilibria described by Varian and Edelman et al. (EOS) assume advertisers determine bids for each individual auction. 
+In current paid search systems, advertisers set bids that are used in a sequence of auctions from which advertisers receive aggregate feedback. 
+By weakening the assumptions in the EOS model, in particular when advertisers are uncertain about entry (the competing set of advertisers) as well as their own quality scores ($x_i$s) over a sequence of auctions where the bids are fixed, \citeN{Athey:2012zr} show that there can be a significant divergence in revenue from VCG and GSP.
 
-% subsection theoretical_variants (end)
+In addition to the models proposed by \citeANP{Varian:2007kx}, \citeANP{Edelman:2007vn}, and \citeANP{Athey:2012zr}, there have been numerous academic studies on variants of GSP or other auction mechanisms---see \citeN{Jansen:2008uq} for a survey of these models.
+While many of these studies provide novel theoretical insights, the chactarizations by the former provide the theoretical foundation for many of advanced techniques (see Section~\ref{sec:advanced_topics}) found in practice today.
 
-\subsection{Structural Model} % (fold)
-\label{sub:structural_model}
+% subsection equilibrium_characterization (end)
 
-TODO
-
-% subsection structural_model (end)
 % section auction_and_marketplace_design (end)
 
-\section{Query Understanding} % (fold)
-\label{sec:query_understanding}
+\section{Machine Learning} % (fold)
+\label{sec:machine_learning}
+
+% section machine_learning (end)
+\subsection{Query Understanding} % (fold)
+\label{sub:query_understanding}
 
 TODO
 
-% section query_understanding (end)
+% subsection query_understanding (end)
 
-\section{Ad Selection and Relevance Modeling} % (fold)
-\label{sec:ad_selection_and_relevance_modeling}
 
-TODO
-
-% section ad_selection_and_relevance_modeling (end)
-
-\section{User Response Modeling} % (fold)
-\label{sec:user_response_modeling}
+\subsection{Ad Selection and Relevance Modeling} % (fold)
+\label{sub:ad_selection_and_relevance_modeling}
 
 TODO
 
-% section user_response_modeling (end)
+% subsection ad_selection_and_relevance_modeling (end)
+
+\subsection{User Response Modeling} % (fold)
+\label{sub:user_response_modeling}
+
+TODO
+
+% subsection user_response_modeling (end)
 
 \section{Advanced Topics} % (fold)
 \label{sec:advanced_topics}
 
 TODO
 
-% section advanced_topics (end)
+\subsection{Value Estimation} % (fold)
+\label{sub:value_estimation}
 
-\subsection{Exploration and Exploitation} % (fold)
-\label{sub:exploration_and_exploitation}
-TODO
+TODO:
+\begin{itemize}
+	\item \citeN{Ostrovsky:2009ve}
+	\item \citeN{Varian:2007kx}
+	\item \citeN{Athey:2012zr}
+\end{itemize}	
 
-% subsection exploration_and_exploitation (end)
+% subsection value_estimation (end)
 
-\subsection{Reserve Pricing} % (fold)
-\label{sub:reserve_pricing}
-
-TODO
-
-% subsection reserve_pricing (end)
-
-\subsection{Budget Optimization} % (fold)
-\label{sub:budget_optimization}
-
-TODO
-
-% subsection budget_optimization (end)
-
-\subsection{Modeling Second-Order Effects} % (fold)
-\label{sub:modeling_second_order_effects}
-
-TODO
-
-% subsection modeling_second_order_effects (end)
 
 \subsection{Whole-Page Optimization} % (fold)
 \label{sub:whole_page_optimization}
@@ -219,12 +235,61 @@ TODO
 
 % subsection whole_page_optimization (end)
 
-\subsection{Externalities} % (fold)
-\label{sub:externalities}
+
+\subsection{Revenue Optimization} % (fold)
+\label{sub:revenue_optimization}
+
+In his seminal work on optimal auction design, \citeN{Myerson:1981kb} proposed a Bayesian mechanism used to extract the optimal revenue from an auction.
+His mechanism exploits the prior distribution of bidder signals (private values).
+Extensions of his work have touched many different auction scenarios including paid search. 
+
+For instance, \citeN{Edelman:2010ly} derive an optimal mechanism that uses a single reserve price.
+Using the model from Section~\ref{sub:single_auction_model}, the author's assume the publisher has a prior distribution on weighted values $\pi_i = \gamma_i v_i$ and that each bidder's weighted value is drawn i.i.d. from a distribution $F(\cdot)$ with pdf $f(\cdot)$ that satisfy \citeANP{Myerson:1981kb}'s regularity conditions.
+These conditions are satisfied, for instance, if the \emph{virtual valuation} $\psi(\pi) = \pi - \frac{1 - F(\pi)}{f(\pi)}$ is decreasing in $\pi$.
+Methods for infering $F$ are described in Section~\ref{sub:revenue_optimization}.
+
+\citeANP{Edelman:2010ly} propose a modification to GSP such that, in order to win a slot, each $s_i \ge r$ and the pricing equation (\ref{eqn:gsp-price}) is updated such that
+\begin{equation}
+p_{(j)} = \frac{\max\{s_{(j+1)},r\}}{s_{(j)}} b_{(j)}.
+\label{eqn:gsp-reserve-price}	
+\end{equation}
+The reserve price, $r^\star$, that optimizes revenue satisfies $\psi(r^\star) = 0$.
+In practice, we observe that bidders' scores are not drawn i.i.d. nor, presumably, are their weighted values.
+Nevertheless, in a complementary study, \citeN{Ostrovsky:2009ve} investigate the effects of applying reserve prices to Yahoo!'s paid search marketplace.  
+They show that the application of reserve prices significantly increased Yahoo!'s revenue.
+
+In a similar vein, however using a qualitatively different approach, \citeN{Lahaie:2007ly} propose a mechanism that alters $x_i$, the quality coefficient in scoring.
+Namely, $x_i \equiv \gamma_i^\omega$, which is commonly referred to as \emph{squashing}.
+Observe that when $\omega = 0$, we have the original rank-by-bid mechanism and when $\omega = 1$ we have the standard GSP mechanism (rank-by-revenue).
+The optimal value for $\omega$ depends on the correlation between $\gamma_i$ and $b_i$.
+
+In pratice, both reserve prices and squashing are used to optimize revenue or other objectives.
+The values for these parameters are set via counterfactual simulation.
+Often the counterfactual simulation assumes no advertiser response, as in \citeN{Acharya:2007pd}.
+Estimating advertiser response at scale is an open problem.
+
+% subsection revenue_optimization (end)
+
+\subsection{Budget Optimization} % (fold)
+\label{sub:budget_optimization}
 
 TODO
 
-% subsection externalities (end)
+% subsection budget_optimization (end)
+
+\subsection{User Utility} % (fold)
+\label{sub:user_utility}
+
+TODO
+
+% subsection user_utility (end)
+
+\subsection{Exploration and Exploitation} % (fold)
+\label{sub:exploration_and_exploitation}
+TODO
+
+% subsection exploration_and_exploitation (end)
+% section advanced_topics (end)
 
 \section{Conclusion} % (fold)
 \label{sec:conclusion}
@@ -233,9 +298,9 @@ TODO
 % section conclusion (end)
 
 % Acknowledgments
-\begin{acks}
-The author would like to thank Dr. J.C. Mao, Microsoft.
-\end{acks}
+% \begin{acks}
+% The author would like to thank Dr. J.C. Mao, Microsoft.
+% \end{acks}
 
 % Bibliography
 \bibliographystyle{ACM-Reference-Format-Journals}
