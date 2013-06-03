@@ -146,10 +146,52 @@ Consider a single auction for a user query.
 There are a set of advertisers, $\mathcal{I} = \{1,\ldots,I\}$, and a set of available slots, $\mathcal{J} = \{1, \ldots, J\}$.  
 The user's click behavior is defined probabilistically: a user clicks on advertiser $i$'s ad in position $j$ with probability $\kappa_{i,j}$.  
 In these models, the click probability $\kappa$ is assumed to be separable, in that $\kappa_{i,j} = \alpha_j\gamma_i$ where $\alpha_j$ is the position effect for slot $j$ and $\gamma_i$ is the advertiser effect for advertiser $i$.  
-Slots are ordered in terms of $\psi$ with $\psi_1 \ge \psi_2 \ge \cdots \ge \psi_{J}$.    
+Slots are ordered in terms of $\alpha$ with $\alpha_1 \ge \alpha_2 \ge \cdots \ge \alpha_{J}$.    
 Finally, each advertiser $i$ submits a bid $b_j$ to the publisher that represents $i$'s willingness-to-pay for a click, which may differ from the advertiser's true value for the click, $v_i$. 
-The auction will assign advertisers to slots and set contingent prices to be paid when an ad is clicked.
+The auction will assign advertisers to slots and set contingent prices to be paid when an ad is clicked, in general referred to as \emph{allocation} and \emph{pricing} rules, respectively.
 
+
+Before describing GSP, first consider another common auction format, the Vickrey-Clark-Groves (VCG) auction \cite{Vickrey:1961ys}.
+This auction has two important properties in our context: advertisers are incentivized to bid truthfully (reveal their true value per click) and the outcome is efficient (the value that values the slot the most wins the slot).
+Additionally, the auction is very simple to understand algorithmically.
+Let $V_i^j = \kappa_{i,j} v_i$ be the welfare of assigning advertiser $i$ slot $j$.
+Let $V_\mathcal{I}^\mathcal{J}$ be the maximum achievable welfare by assigning at most one advertiser to each slot, similarly $V_{\mathcal{I}\setminus \{i\}}^\mathcal{J}$ is the maximum achievable welfare without advertiser $i$.
+If advertiser $i$ is allocated slot $j$, then $i$ pays an amount $p_i$ per click:
+\begin{equation}
+\kappa_{i,j} p_{i} = V_{\mathcal{I}\setminus \{i\}}^\mathcal{J} - V_{\mathcal{I}\setminus \{i\}}^{\mathcal{J}\setminus \{j\}}.
+\label{eqn:vcg-price}
+\end{equation}
+The expected payment is the \emph{externality} advertiser $i$ imposes on the other participants (advertisers and publisher).
+Notice that if we have an algorithm for solving $V_\mathcal{I}^\mathcal{J}$, then we can na\"{i}vely run the VCG auction with a linear number of calls to the algorithm.
+Often, as is the case in paid search, there is more structure to the problem that we can exploit to run the auction more efficiently.
+%Intuitively, we can think of the expected payment $\kappa_{i,j} p_i$ as the minimum expected bid (per impression) advertiser $i$ has to submit for the allocation algorithm not to change its decision.
+Consider Example~\ref{ex:simple-setting} for illustration.
+
+\begin{example}
+For a given a keyword auction, there are two available slots ($1$ and $2$) having $\alpha$s of 1.0, and 0.5, respectively.  
+There are three advertisers ($a$, $b$, and $c$) competing for the slots with $\gamma$s of 0.8, 0.9, 1, respectively, each having a unit value per click.
+\label{ex:simple-setting} 
+\end{example}
+
+The welfare maximizing allocation occurs when the $c$ is assigned the slot 1 and the $b$ is assigned slot 2, with $a$ not shown.  
+This yields an expected welfare of $1.45$, of which $c$ contributes $0.90$ and $b$ contributes $0.45$.
+The welfare maximizing allocation without $c$ is $1.30$, which occurs when $b$ is allocated slot 1 and $a$ is allocated slot 2.
+The welfare maximizing allocation without $b$ is $1.40$, which occurs when $c$ is allocated slot 1 and $a$ is allocated slot 2.
+The externality $c$ imposes is $1.30 - 0.45 = 0.85$, whereas the externality $b$ imposes is $1.40 - 1 = 0.40$.
+To determine the price paid by the advertisers, we compute the price per click required to pay the externality in expectation, which is simply $p_i / \kappa_{i,j}$.
+Assuming the advertisers bid truthfully, the outcome is shown in Table~\ref{tab:vcg-example}.
+
+\begin{table}[htbp]%
+\tbl{VCG Outcome for Example~\ref{ex:simple-setting}.\label{tab:vcg-example}}{%
+\begin{tabular}{c|c|r|r|r}
+Slot & Advertiser & Welfare & Externality & Price \\\hline
+1 & $c$ & 1 & 0.85 & 0.85 \\\hline
+2 & $b$ & 0.45 & 0.40 &0.89 \\\hline
+N/A & $a$ & 0 & 0 & 0\\\hline
+\end{tabular}}
+\end{table}%
+
+%GSP maintains a similar property to VCG in that the amount the advertiser is charged is the minimum amount required to maintain its resulting slot (decision by the allocation algorithm).
 The mechanics of the GSP auction are as follows.  
 Each advertiser's ad is scored according to $s_i = x_i b_i$.
 The coefficient $x_i$ is a function of $\gamma_i$ ad other factors.
@@ -163,6 +205,33 @@ p_{(j)} = \frac{s_{(j+1)}}{s_{(j)}} b_{(j)}.
 \label{eqn:gsp-price}
 \end{equation}
 
+We can contrast the outcome with VCG to the outcome with GSP for Example~\ref{ex:simple-setting}.
+For comparison, we assume that the advertisers bid truthfully, which we will see in Section~\ref{sub:equilibrium_characterization} that they are not incented to do.
+First, we rank the advertisers in decreasing order of score: $s_c=1.0$, $s_b= 0.9$, and $s_a = 0.8$.
+Then we allocate the advertiser according to their rank: $c$ gets slot 1 and $b$ gets slot 2.
+Notice that the allocation for VCG and GSP is the same.
+The prices are given by $p_c = s_b/s_c v_c$ and $p_b = s_a/s_b v_b$.
+For each winning advertiser, correspond to the minimum bids required to maintain the same ranking.
+The outcome is shown in Table~\ref{tab:gsp-example}.
+
+\begin{table}[htbp]%
+\tbl{GSP Outcome for Example~\ref{ex:simple-setting}.\label{tab:gsp-example}}{%
+\begin{tabular}{c|c|r|r|r}
+Slot & Advertiser & Score & Next Score & Price \\\hline
+1 & $c$ & 1.0 & 0.9 & 0.9 \\\hline
+2 & $b$ & 0.9 & 0.8 & 0.89 \\\hline
+N/A & $a$ & 0.8 & 0 & 0\\\hline
+\end{tabular}}
+\end{table}%
+
+%In contrast VCG (where solving the allocation problem can be combinatorial in general), GSP uses a greedy algorithm to rank the ads by $s_i$ first and allocates according to that ranking. 
+%The contingent price charged a winning advertiser $i$ in GSP is the minimum amount advertiser $i$ has to pay in order to not change positions in the ranking.
+%In loose analogy, we can think of GSP and VCG as being from the same family of paid search auctions where an advertiser pays the minimum amount necessary for the allocation algorithm not to change its decision.
+%In this analogy, the GSP allocation algorithm considers a one-step look ahead (what is the minimum amount necessary to change my decision if I only consider the current slot), whereas VCG can be thought of as an infinite-step look ahead (what is the minimum amount necessary to not change my decision on the current slot given all remaining slots).
+
+Notice that for a single slot, the GSP and VCG outcomes coincide.
+However, for multiple slots they differ in pricing with GSP having weakly higher prices for the same scenario.
+ 
 % subsection single_auction_model (end)
 
 \subsection{GSP Equilibria} % (fold)
@@ -173,7 +242,7 @@ and Yahoo! \cite{Edelman:2007vn}.
 The authors characterize the set of ex post Nash equilibria under a complete-information setting\footnote{The sets $\mathcal{I}$, $\mathcal{J}$, $\{\alpha_j\}_{j\in \mathcal{J}}$, and $\{\gamma_i\}_{i \in \mathcal{I}}$ are known to all participants.} with risk-neutral advertisers.
 In this setting, the equilbria giving the lowest revenue to the publisher are outcome equivalent to the Vickrey-Clark-Groves (VCG) auction \cite{Vickrey:1961ys}.
 
-The equilibria described by Varian and Edelman et al. (EOS) assume advertisers determine bids for each individual auction. 
+The equilibria described by \citeANP{Varian:2007kx} and \citeANP{Edelman:2007vn} (EOS) assume advertisers determine bids for each individual auction. 
 In current paid search systems, advertisers set bids that are used in a sequence of auctions from which advertisers receive aggregate feedback. 
 By weakening the assumptions in the EOS model, in particular when advertisers are uncertain about entry (the competing set of advertisers) as well as their own quality scores ($x_i$s) over a sequence of auctions where the bids are fixed, \citeN{Athey:2012zr} show that there can be a significant divergence in revenue from VCG and GSP.
 
