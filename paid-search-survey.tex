@@ -29,6 +29,8 @@
 \acmYear{2013}
 \acmMonth{3}
 
+\newcommand{\subjectto}{\mathop{\rm {subject\ to}}\nolimits}
+
 % Document starts
 \begin{document}
 
@@ -164,7 +166,6 @@ If advertiser $i$ is allocated slot $j$, then $i$ pays an amount $p_i$ per click
 The expected payment is the \emph{externality} advertiser $i$ imposes on the other participants (advertisers and publisher).
 Notice that if we have an algorithm for solving $V_\mathcal{I}^\mathcal{J}$, then we can na\"{i}vely run the VCG auction with a linear number of calls to the algorithm.
 Often, as is the case in paid search, there is more structure to the problem that we can exploit to run the auction more efficiently.
-%Intuitively, we can think of the expected payment $\kappa_{i,j} p_i$ as the minimum expected bid (per impression) advertiser $i$ has to submit for the allocation algorithm not to change its decision.
 Consider Example~\ref{ex:simple-setting} for illustration.
 
 \begin{example}
@@ -191,7 +192,6 @@ N/A & $a$ & 0 & 0 & 0\\\hline
 \end{tabular}}
 \end{table}%
 
-%GSP maintains a similar property to VCG in that the amount the advertiser is charged is the minimum amount required to maintain its resulting slot (decision by the allocation algorithm).
 The mechanics of the GSP auction are as follows.  
 Each advertiser's ad is scored according to $s_i = x_i b_i$.
 The coefficient $x_i$ is a function of $\gamma_i$ ad other factors.
@@ -224,11 +224,6 @@ N/A & $a$ & 0.8 & 0 & 0\\\hline
 \end{tabular}}
 \end{table}%
 
-%In contrast VCG (where solving the allocation problem can be combinatorial in general), GSP uses a greedy algorithm to rank the ads by $s_i$ first and allocates according to that ranking. 
-%The contingent price charged a winning advertiser $i$ in GSP is the minimum amount advertiser $i$ has to pay in order to not change positions in the ranking.
-%In loose analogy, we can think of GSP and VCG as being from the same family of paid search auctions where an advertiser pays the minimum amount necessary for the allocation algorithm not to change its decision.
-%In this analogy, the GSP allocation algorithm considers a one-step look ahead (what is the minimum amount necessary to change my decision if I only consider the current slot), whereas VCG can be thought of as an infinite-step look ahead (what is the minimum amount necessary to not change my decision on the current slot given all remaining slots).
-
 Notice that for a single slot, the GSP and VCG outcomes coincide.
 However, for multiple slots they differ in pricing with GSP having weakly higher prices for the same scenario.
  
@@ -250,6 +245,12 @@ In addition to the models proposed by \citeANP{Varian:2007kx}, \citeANP{Edelman:
 While many of these studies provide novel theoretical insights, the chactarizations by the former provide the theoretical foundation for many of advanced techniques (see Section~\ref{sec:advanced_topics}) found in practice today.
 
 % subsection equilibrium_characterization (end)
+
+\subsection{Advertiser Response}
+
+TODO
+
+% subsection advertiser_response (end)
 
 % section auction_and_marketplace_design (end)
 
@@ -279,31 +280,8 @@ TODO
 
 % subsection user_response_modeling (end)
 
-\section{Advanced Topics} % (fold)
-\label{sec:advanced_topics}
-
-TODO
-
-\subsection{Value Estimation} % (fold)
-\label{sub:value_estimation}
-
-TODO:
-\begin{itemize}
-	\item \citeN{Ostrovsky:2009ve}
-	\item \citeN{Varian:2007kx}
-	\item \citeN{Athey:2012zr}
-\end{itemize}	
-
-% subsection value_estimation (end)
-
-
-\subsection{Whole-Page Optimization} % (fold)
-\label{sub:whole_page_optimization}
-
-TODO
-
-% subsection whole_page_optimization (end)
-
+\section{Optimization}
+\label{sec:optimization}
 
 \subsection{Revenue Optimization} % (fold)
 \label{sub:revenue_optimization}
@@ -332,7 +310,7 @@ Namely, $x_i \equiv \gamma_i^\omega$, which is commonly referred to as \emph{squ
 Observe that when $\omega = 0$, we have the original rank-by-bid mechanism and when $\omega = 1$ we have the standard GSP mechanism (rank-by-revenue).
 The optimal value for $\omega$ depends on the correlation between $\gamma_i$ and $b_i$.
 
-In pratice, both reserve prices and squashing are used to optimize revenue or other objectives.
+In practice, both reserve prices and squashing are used to optimize revenue or other objectives.
 The values for these parameters are set via counterfactual simulation.
 Often the counterfactual simulation assumes no advertiser response, as in \citeN{Acharya:2007pd}.
 Estimating advertiser response at scale is an open problem.
@@ -353,23 +331,63 @@ TODO
 
 % subsection user_utility (end)
 
-\subsection{Exploration and Exploitation} % (fold)
-\label{sub:exploration_and_exploitation}
+\subsection{General Problem} % (fold)
+\label{sub:general_problem}
+
+As we depart from the basic GSP model of an auction, we introduce more auction parameters.
+In order for publishers to meet their objectives, be they revenue, efficiency, or otherwise, they need to tune these parameters.
+We now consider the general problem of determining optimal values for a set of auction parameters $(p_i)_{i=1}^K$.
+
+In doing so, we use a model that only considers first-order effects (no advertiser response), principally, due to the lack of an accurate behavioral model.
+Partially because of the lack of a second-order model, and more generally due to the risk of overfitting, we partition the query space into clusters, $\mathcal{C} = \{1, \ldots, C\}$ where $Q_c$ denotes the set of queries belonging to cluster $c\in \mathcal{C}$.
+Parameters may be set independently for each cluster $c$, denoted $p_i^c$.
+
+We consider the abstract objective function $f$, such that $f^q(p)$ denote the result of evaluating $f$ on query $q$ with parameter settings $p$.
+In addition, we only consider objective functions such that $f$ is additive across queries, hence $f^Q(p) = \sum _{q \in Q} f^q(p)$. 
+We consider functions $h$ and $g$ similarly.
+
+\begin{equation}
+\begin{array}{rl}
+\max & \sum\limits_{c \in C} f^{Q_c}(p^q) \\
+\subjectto & \sum\limits_{c \in C} g_i^{Q_c}(p^q) = \forall i = 1,\ldots,M \\
+                  & \sum\limits_{c \in C} h_j^q(p^q) \le \forall j = 1,\ldots,N\\
+\end{array}
+\end{equation}
+
+% subsection general_problem (end)
+
+% section optimization (end)
+
+\section{Advanced Topics} % (fold)
+\label{sec:advanced_topics}
+
 TODO
 
-% subsection exploration_and_exploitation (end)
+\subsection{Value Estimation} % (fold)
+\label{sub:value_estimation}
+
+TODO:
+\begin{itemize}
+	\item \citeN{Ostrovsky:2009ve}
+	\item \citeN{Varian:2007kx}
+	\item \citeN{Athey:2012zr}
+\end{itemize}	
+
+% subsection value_estimation (end)
+
 % section advanced_topics (end)
 
 \section{Conclusion} % (fold)
 \label{sec:conclusion}
 
 TODO
+
 % section conclusion (end)
 
 % Acknowledgments
-% \begin{acks}
-% The author would like to thank Dr. J.C. Mao, Microsoft.
-% \end{acks}
+\begin{acks}
+The author would like to thank J.C. Mao, Omer Har, Anton Schwaighofer, ... for their useful conversations and comments.
+\end{acks}
 
 % Bibliography
 \bibliographystyle{ACM-Reference-Format-Journals}
@@ -380,7 +398,7 @@ TODO
                              % Gerry Murray - March 2012
 
 % History dates
-\received{February 2007}{March 2009}{June 2009}
+\received{June 2013}{N/A}{N/A}
 
 \end{document}
 % End of v2-acmsmall-sample.tex (March 2012) - Gerry Murray, ACM
